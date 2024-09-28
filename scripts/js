@@ -1,0 +1,41 @@
+// Set current year in the footer
+document.getElementById('currentyear').textContent = new Date().getFullYear();
+
+// Set last modified date in the footer
+document.getElementById('lastModified').textContent = `Last Modified: ${document.lastModified}`;
+
+// Fetch and display members
+async function fetchMembers() {
+    const response = await fetch('data/members.json');
+    const members = await response.json();
+    displayMembers(members);
+}
+
+function displayMembers(members) {
+    const container = document.getElementById('members-container');
+    container.innerHTML = '';
+    members.forEach(member => {
+        const memberDiv = document.createElement('div');
+        memberDiv.className = 'member-card';
+        memberDiv.innerHTML = `
+            <img src="images/${member.image}" alt="${member.name}">
+            <h3>${member.name}</h3>
+            <p>${member.address}</p>
+            <p>${member.phone}</p>
+            <p><a href="${member.website}" target="_blank">Visit Website</a></p>
+        `;
+        container.appendChild(memberDiv);
+    });
+}
+
+// Toggle between grid and list view
+document.getElementById('grid-view').addEventListener('click', () => {
+    document.getElementById('members-container').classList.remove('list-view');
+});
+
+document.getElementById('list-view').addEventListener('click', () => {
+    document.getElementById('members-container').classList.add('list-view');
+});
+
+// Initialize members on page load
+fetchMembers();
